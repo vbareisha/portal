@@ -18,24 +18,29 @@ public class TokenAuthenticationService {
 
     private final TokenHandler tokenHandler;
 
-    public TokenAuthenticationService(String secret) {
-        tokenHandler = new TokenHandler(secret);
+    public TokenAuthenticationService(String secret, long ttlPeriod) {
+        tokenHandler = new TokenHandler(secret, ttlPeriod);
     }
 
     public void addAuthentication(HttpServletResponse response, Authentication authentication) {
         final User user = (User) authentication.getDetails();
-        response.addHeader(AUTH_HEADER_NAME, tokenHandler.createTokenForUser(user));
+        response.addHeader(AUTH_HEADER_NAME, tokenHandler.createTokenForUser(user, System.currentTimeMillis()));
     }
 
 
     public Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(AUTH_HEADER_NAME);
         if (token != null) {
-            String user = tokenHandler.parseUserFromToken(token);
-            if (user != null) {
-                Set<GrantedAuthority> set = getUserRoleFromClaims();
-                User userNotification = new User(user, "", set);
-                return new UserAuthentication(userNotification);
+
+            try {
+                String user = tokenHandler.parseUserFromToken(token);
+                if (user != null) {
+                    Set<GrantedAuthority> set = getUserRoleFromClaims();
+                    User userNotification = new User(user, "", set);
+                    return new UserAuthentication(userNotification);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e.getCause());
             }
         }
 

@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Objects;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -29,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public SecurityConfig(Environment env) {
         super(true);
         this.env = env;
-        tokenAuthenticationService = new TokenAuthenticationService(this.env.getProperty("secret.key"));
+        tokenAuthenticationService = new TokenAuthenticationService(this.env.getProperty("secret.key"), Long.parseLong(Objects.requireNonNull(this.env.getProperty("external.ttl.period"))));
     }
 
     @Override
