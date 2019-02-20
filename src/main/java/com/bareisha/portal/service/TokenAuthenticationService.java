@@ -54,9 +54,7 @@ public class TokenAuthenticationService {
      */
     public Set<GrantedAuthority> getUserRoleFromClaims() {
         Set<GrantedAuthority> authority = new HashSet<>();
-
-        if (authority.size() == 0) authority.add(new SimpleGrantedAuthority("ROLE_USER"));
+        authority.add(new SimpleGrantedAuthority("ROLE_USER"));
         return authority;
     }
-
 }

@@ -20,4 +20,6 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
 
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.6.0'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8'
+
 }
