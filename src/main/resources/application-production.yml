@@ -1,0 +1,11 @@
+logging:
+  level:
+    org.springframework.web: error
+    com.bareisha: error
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: ./log/application.log
+
+db.users:
+  "D:\\projects\\portal\\src\\main\\resources\\data\\users.yml"

@@ -4,6 +4,8 @@ import com.bareisha.portal.core.dto.ExternalUserDto;
 import com.bareisha.portal.core.dto.UserAuthentication;
 import com.bareisha.portal.service.TokenAuthenticationService;
 import com.bareisha.portal.service.api.IUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ import java.util.HashSet;
 @RestController
 @RequestMapping("/token")
 public class TokenController {
+
+    private static final Logger log = LoggerFactory.getLogger(TokenController.class);
 
     private final TokenAuthenticationService tokenAuthenticationService;
 
@@ -39,6 +43,7 @@ public class TokenController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
+        log.error("User not found! user = {}", externalUserDto);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

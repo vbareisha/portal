@@ -1,2 +1,6 @@
+spring:
+  profiles:
+    active: dev
+
 secret.key: bH2wqbexp!@
 external.ttl.period: 7200000
