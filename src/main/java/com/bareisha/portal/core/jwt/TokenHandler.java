@@ -62,7 +62,7 @@ public class TokenHandler {
      * @return значение
      * @throws AuthenticationException если что то пошло не так - все наверх
      */
-    public static String safeExtractKey(Claims body, String key) throws Exception {
+    private static String safeExtractKey(Claims body, String key) throws Exception {
         return Optional.ofNullable(body)
                 .map(b -> b.get(key))
                 .map(String::valueOf)

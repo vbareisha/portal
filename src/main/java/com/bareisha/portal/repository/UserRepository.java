@@ -11,9 +11,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepository implements IUserRepository {
@@ -21,6 +24,8 @@ public class UserRepository implements IUserRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRepository.class);
 
     private final String db_users;
+
+    private ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
     @Autowired
     public UserRepository(Environment environment) {
@@ -33,8 +38,12 @@ public class UserRepository implements IUserRepository {
     @Override
     public List<User> getAllUsers() {
         UsersYaml users;
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        String path = getPathYml();
+        users = getUsersFromYaml(mapper, path);
+        return users == null ? new ArrayList<>() : users.getUsers();
+    }
 
+    private String getPathYml() {
         URL urlPath = this.getClass().getClassLoader().getResource(db_users);
         String path;
         if (urlPath == null) {
@@ -42,8 +51,27 @@ public class UserRepository implements IUserRepository {
         } else {
             path = urlPath.getPath();
         }
-        users = getUsersFromYaml(mapper, path);
-        return users == null ? new ArrayList<>() : users.getUsers();
+        return path;
+    }
+
+    @Override
+    public synchronized void createUser(String userName, String password) {
+        List<User> users = getAllUsers();
+        users.add(new User(userName, password));
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("users", users);
+        // save to yml
+        try {
+            String path = getPathYml();
+            File file = new File(path);
+            FileWriter fw = new FileWriter(file);
+            fw.write(mapper.writeValueAsString(data));
+            fw.close();
+        } catch (Exception e) {
+            LOGGER.error("Error during saving user {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     private UsersYaml getUsersFromYaml(ObjectMapper mapper, String path) {

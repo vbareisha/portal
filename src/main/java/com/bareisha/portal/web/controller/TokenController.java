@@ -34,7 +34,7 @@ public class TokenController {
         this.userService = userService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/login")
     public ResponseEntity<?> getToken(@RequestBody ExternalUserDto externalUserDto, HttpServletResponse response) {
         if (userService.checkUserByNameAndPassword(externalUserDto.getUserName(), externalUserDto.getPassword())) {
             User user = new User(externalUserDto.getUserName(), externalUserDto.getPassword(), new HashSet<>());
@@ -45,5 +45,13 @@ public class TokenController {
 
         log.error("User not found! user = {}", externalUserDto);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("create")
+    public ResponseEntity<?> createUser(@RequestBody ExternalUserDto newUser) {
+        log.debug("Start to create user {}", newUser);
+        boolean result = userService.createUser(newUser.getUserName(), newUser.getPassword());
+
+        return result ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

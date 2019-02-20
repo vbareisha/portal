@@ -30,4 +30,18 @@ public class UserService implements IUserService {
 
         return false;
     }
+
+    @Override
+    public boolean createUser(String userName, String password) {
+        // check on existing user
+        List<User> users = userRepository.getAllUsers();
+        for (User user : users) {
+            if (user.getName().equals(userName) && user.getPassword().equals(password)) {
+                return false;
+            }
+        }
+        // not found any match - create user
+        userRepository.createUser(userName, password);
+        return true;
+    }
 }

@@ -17,21 +17,18 @@ import java.util.Objects;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-    private final String TOKEN_URL = "/token/create";
+    private final String TOKEN_URL = "/token/login";
+    private final String CREATE_USER_URL = "/token/create";
     private final String MAIN_URL = "/main/**";
 
     private final String USER_ROLE = "USER";
 
     private final TokenAuthenticationService tokenAuthenticationService;
 
-    private final Environment env;
-
     @Autowired
     public SecurityConfig(Environment env) {
         super(true);
-        this.env = env;
-        tokenAuthenticationService = new TokenAuthenticationService(this.env.getProperty("secret.key"), Long.parseLong(Objects.requireNonNull(this.env.getProperty("external.ttl.period"))));
+        tokenAuthenticationService = new TokenAuthenticationService(env.getProperty("secret.key"), Long.parseLong(Objects.requireNonNull(env.getProperty("external.ttl.period"))));
     }
 
     @Override
@@ -42,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .servletApi().and()
                 .authorizeRequests()
                 // Allow anonymous logins
-                .antMatchers(TOKEN_URL, "/", "/css/**").permitAll()
+                .antMatchers(TOKEN_URL, CREATE_USER_URL, "/", "/css/**").permitAll()
                 .antMatchers(MAIN_URL).hasAnyRole(USER_ROLE)
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService),
