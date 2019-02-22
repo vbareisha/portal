@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("token")
 public class TokenProperties {
     private String secretKey;
-    private String ttlPeriod;
+    private Long ttlPeriod;
 
     public String getSecretKey() {
         return secretKey;
@@ -15,11 +15,11 @@ public class TokenProperties {
         this.secretKey = secretKey;
     }
 
-    public String getTtlPeriod() {
+    public Long getTtlPeriod() {
         return ttlPeriod;
     }
 
-    public void setTtlPeriod(String ttlPeriod) {
+    public void setTtlPeriod(Long ttlPeriod) {
         this.ttlPeriod = ttlPeriod;
     }
 }

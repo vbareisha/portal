@@ -1,17 +1,15 @@
 package com.bareisha.portal.config;
 
+import com.bareisha.portal.config.properties.TokenProperties;
 import com.bareisha.portal.service.TokenAuthenticationService;
 import com.bareisha.portal.web.filter.StatelessAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import java.util.Objects;
 
 @Configuration
 @EnableWebSecurity
@@ -26,9 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenAuthenticationService tokenAuthenticationService;
 
     @Autowired
-    public SecurityConfig(Environment env) {
+    public SecurityConfig(TokenProperties tokenProperties) {
         super(true);
-        tokenAuthenticationService = new TokenAuthenticationService(env.getProperty("token.secret-key"), Long.parseLong(Objects.requireNonNull(env.getProperty("token.ttl-period"))));
+        tokenAuthenticationService = new TokenAuthenticationService(tokenProperties.getSecretKey(), tokenProperties.getTtlPeriod());
     }
 
     @Override

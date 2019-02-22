@@ -1,5 +1,6 @@
 package com.bareisha.portal.repository;
 
+import com.bareisha.portal.config.properties.StorageProperties;
 import com.bareisha.portal.core.dto.User;
 import com.bareisha.portal.core.dto.UsersYaml;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +8,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
@@ -28,8 +28,8 @@ public class UserRepository implements IUserRepository {
     private ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
     @Autowired
-    public UserRepository(Environment environment) {
-        db_users = environment.getProperty("storage.file");
+    public UserRepository(StorageProperties storageProperties) {
+        db_users = storageProperties.getFile();
         if (db_users == null || db_users.isEmpty()) {
             throw new RuntimeException("Can't find users database!");
         }
