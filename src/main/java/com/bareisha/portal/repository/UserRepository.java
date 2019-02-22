@@ -29,7 +29,7 @@ public class UserRepository implements IUserRepository {
 
     @Autowired
     public UserRepository(Environment environment) {
-        db_users = environment.getProperty("db.users");
+        db_users = environment.getProperty("storage.file");
         if (db_users == null || db_users.isEmpty()) {
             throw new RuntimeException("Can't find users database!");
         }

@@ -7,5 +7,5 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   file: ./log/application.log
 
-db.users:
-  "D:\\projects\\portal\\src\\main\\resources\\data\\users.yml"
+storage:
+  file: "D:\\projects\\portal\\src\\main\\resources\\data\\users.yml"

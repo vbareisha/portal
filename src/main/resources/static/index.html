@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Signin Template for Bootstrap</title>
+    <title>Налибокская 38</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -18,21 +18,43 @@
 
 <body class="text-center">
 <form class="form-signin">
-    <img class="mb-4" src="./Signin Template for Bootstrap_files/bootstrap-solid.svg" alt="" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" value="remember-me"> Remember me
-        </label>
-    </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+    <h1 class="h3 mb-3 font-weight-normal">Добро пожаловать</h1>
+    <label for="username" class="sr-only">Email address</label>
+    <input type="email" id="username" class="form-control" placeholder="Email address" required="" autofocus="">
+    <label for="password" class="sr-only">Password</label>
+    <input type="password" id="password" class="form-control" placeholder="Password" required="">
+    <button class="btn btn-lg btn-primary btn-block" type="button" id="login">Вход</button>
+    <p class="mt-5 mb-3 text-muted">© 2019</p>
 </form>
 
+<script src="./js/jquery-3.3.1.min.js"></script>
+
+<script>
+    var SERVER_URL = 'http://localhost:8080';
+
+    $('#login').click(function () {
+        var url = SERVER_URL + '/token/login';
+
+        $.ajax({
+            url: url,
+            method: "POST",
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({"userName": $('#username').val(), "password": $('#password').val()}),
+            beforeSend: function (xhr) {
+                console.log('Send request ...' + url);
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+        }).done(function (data) {
+            console.log('Done' + data);
+        }).fail(function (jqXHR, textStatus) {
+            console.log('fail - ' + textStatus);
+        });
+    });
+
+</script>
 
 </body>
 </html>

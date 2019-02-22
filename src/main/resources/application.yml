@@ -2,5 +2,6 @@ spring:
   profiles:
     active: dev
 
-secret.key: bH2wqbexp!@
-external.ttl.period: 7200000
+token:
+  secret-key: bH2wqbexp!@
+  ttl-period: 7200000

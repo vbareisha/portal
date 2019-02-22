@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public SecurityConfig(Environment env) {
         super(true);
-        tokenAuthenticationService = new TokenAuthenticationService(env.getProperty("secret.key"), Long.parseLong(Objects.requireNonNull(env.getProperty("external.ttl.period"))));
+        tokenAuthenticationService = new TokenAuthenticationService(env.getProperty("token.secret-key"), Long.parseLong(Objects.requireNonNull(env.getProperty("token.ttl-period"))));
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .servletApi().and()
                 .authorizeRequests()
                 // Allow anonymous logins
-                .antMatchers(TOKEN_URL, CREATE_USER_URL, "/", "/css/**").permitAll()
+                .antMatchers(TOKEN_URL, CREATE_USER_URL, "/", "/css/**", "/js/**").permitAll()
                 .antMatchers(MAIN_URL).hasAnyRole(USER_ROLE)
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService),

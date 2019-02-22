@@ -1,0 +1,6 @@
+token:
+  secret-key: bH2wqbexp!@
+  ttl-period: 7200000
+
+storage:
+  file: "data/users.yml"

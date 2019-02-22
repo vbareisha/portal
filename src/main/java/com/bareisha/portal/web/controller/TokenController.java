@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/token")
@@ -40,7 +42,11 @@ public class TokenController {
             User user = new User(externalUserDto.getUserName(), externalUserDto.getPassword(), new HashSet<>());
             UserAuthentication authentication = new UserAuthentication(user);
             tokenAuthenticationService.addAuthentication(response, authentication);
-            return new ResponseEntity<>(HttpStatus.OK);
+
+            Map<String, String> responseJson = new HashMap<String, String>() {{
+                put("status", "ok");
+            }};
+            return new ResponseEntity<>(responseJson, HttpStatus.OK);
         }
 
         log.error("User not found! user = {}", externalUserDto);
