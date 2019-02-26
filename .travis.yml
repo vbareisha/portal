@@ -6,3 +6,4 @@ jdk:
   - oraclejdk8
 script:
   - ./gradlew build -s
+  - ./gradlew test -s
