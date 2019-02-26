@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final String TOKEN_URL = "/token/login";
     private final String CREATE_USER_URL = "/token/create";
     private final String MAIN_URL = "/main/**";
+    private final String NEWS_URL = "/news/**";
 
     private final String USER_ROLE = "USER";
 
@@ -38,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // Allow anonymous logins
                 .antMatchers(TOKEN_URL, CREATE_USER_URL, "/", "/css/**", "/js/**").permitAll()
-                .antMatchers(MAIN_URL).hasAnyRole(USER_ROLE)
+                .antMatchers(MAIN_URL, NEWS_URL).hasAnyRole(USER_ROLE)
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService),
                         UsernamePasswordAuthenticationFilter.class);

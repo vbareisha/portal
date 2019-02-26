@@ -19,23 +19,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * - login with correct data
  * - create existing user
  * - create new user
+ * - check on forbidden
  */
 public class TokenControllerTest extends AbstractControllerTest {
 
-    private static final String URL = "/token/login";
+    private static final String URL_LOGIN = "/token/login";
+
+    private static final String URL_CREATE_USER = "/token/create";
 
     @MockBean
     private IUserService userService;
 
     @Test
-    public void tryToLoginWithEmptyAndGetError() throws Exception {
+    public void tryToLoginWithEmptyAndGetErrorNadRequest() throws Exception {
         setup();
-        MvcResult mvcResult = this.mockMvc.perform(post(URL).contentType(contentType))
+        MvcResult mvcResult = this.mockMvc.perform(post(URL_LOGIN).contentType(contentType))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
     @Test
-    public void tryToLoginWithInvalidDataAndGetError() throws Exception {
+    public void tryToLoginWithInvalidDataAndGetErrorBadRequest() throws Exception {
         setup();
 
         ExternalUserDto user = getExternalUserDto("test", "test");
@@ -43,7 +46,7 @@ public class TokenControllerTest extends AbstractControllerTest {
         String data = objectMapper.writeValueAsString(user);
         when(userService.checkUserByNameAndPassword(anyString(), anyString())).thenReturn(false);
 
-        MvcResult mvcResult = this.mockMvc.perform(post(URL).contentType(contentType).content(data))
+        MvcResult mvcResult = this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(data))
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
@@ -63,8 +66,42 @@ public class TokenControllerTest extends AbstractControllerTest {
         String data = objectMapper.writeValueAsString(user);
         when(userService.checkUserByNameAndPassword(anyString(), anyString())).thenReturn(true);
 
-        MvcResult mvcResult = this.mockMvc.perform(post(URL).contentType(contentType).content(data))
+        MvcResult mvcResult = this.mockMvc.perform(post(URL_LOGIN).contentType(contentType).content(data))
                 .andExpect(status().isOk()).andReturn();
 
+    }
+
+    @Test
+    public void createExistingUserAndGetErrorBadRequest() throws Exception {
+        setup();
+
+        ExternalUserDto user = getExternalUserDto("bareisha89@gmail.com", "1234");
+        String data = objectMapper.writeValueAsString(user);
+
+        when(userService.createUser(anyString(), anyString())).thenReturn(false);
+
+        MvcResult mvcResult = this.mockMvc.perform(post(URL_CREATE_USER).contentType(contentType).content(data))
+                .andExpect(status().isBadRequest()).andReturn();
+    }
+
+    @Test
+    public void createUser() throws Exception {
+        setup();
+
+        ExternalUserDto user = getExternalUserDto("bareisha89@gmail.com", "1234");
+        String data = objectMapper.writeValueAsString(user);
+
+        when(userService.createUser(user.getUserName(), user.getPassword())).thenReturn(true);
+
+        MvcResult mvcResult = this.mockMvc.perform(post(URL_CREATE_USER).contentType(contentType).content(data))
+                .andExpect(status().isOk()).andReturn();
+    }
+
+    @Test
+    public void getNewsAndGetErrorForbidden() throws Exception {
+        setup();
+
+        MvcResult mvcResult = this.mockMvc.perform(post("/news"))
+                .andExpect(status().isForbidden()).andReturn();
     }
 }
