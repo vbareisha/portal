@@ -19,10 +19,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile('org.springframework.boot:spring-boot-starter-security')
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.6.0'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.8'
 
-    compileOnly 'org.projectlombok:lombok:1.18.4'
-    annotationProcessor 'org.projectlombok:lombok:1.18.4'
 }
