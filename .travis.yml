@@ -5,4 +5,4 @@ install: true
 jdk:
   - oraclejdk8
 script:
-  - ./gradlew check -s
+  - ./gradlew build -s
