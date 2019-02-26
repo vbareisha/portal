@@ -1,6 +1,6 @@
-install: gradle wrapper --gradle-version 5.2.1
 language: java
+install: true
 jdk:
   - oraclejdk8
 script:
-  - ./gradlew test --scan -s
+  - ./gradlew build --scan -s
