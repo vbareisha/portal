@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.1.2.RELEASE'
     id 'java'
+    id 'com.gradle.build-scan' version '2.0.2'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -11,6 +12,12 @@ sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
+}
+
+task deployToDir(type: Copy, group: "Custom", description: "Copies jar to the deploy directory") {
+    dependsOn << build
+    from "build/libs"
+    into "deploy"
 }
 
 dependencies {
