@@ -14,7 +14,7 @@ repositories {
     mavenCentral()
 }
 
-task deployToDir(type: Copy, group: "Custom", description: "Copies jar to the deploy directory") {
+task deployToDir(type: Copy, group: "Portal deploy", description: "Copies jar to the deploy directory") {
     dependsOn << build
     from "build/libs"
     into "deploy"
