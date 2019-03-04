@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,11 +38,14 @@ public class TokenController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> getToken(@RequestBody ExternalUserDto externalUserDto, HttpServletResponse response) {
+    public ResponseEntity<?> getToken(@RequestBody ExternalUserDto externalUserDto,
+                                      HttpServletResponse response,
+                                      HttpServletRequest request) {
         if (userService.checkUserByNameAndPassword(externalUserDto.getUserName(), externalUserDto.getPassword())) {
             User user = new User(externalUserDto.getUserName(), externalUserDto.getPassword(), new HashSet<>());
             UserAuthentication authentication = new UserAuthentication(user);
-            tokenAuthenticationService.addAuthentication(response, authentication);
+            //tokenAuthenticationService.addAuthentication(response, authentication);
+            tokenAuthenticationService.addAuthentication(request, authentication);
 
             Map<String, String> responseJson = new HashMap<String, String>() {{
                 put("status", "ok");

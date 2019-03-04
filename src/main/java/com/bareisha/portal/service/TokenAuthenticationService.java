@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,30 +28,38 @@ public class TokenAuthenticationService {
         response.addHeader(AUTH_HEADER_NAME, tokenHandler.createTokenForUser(user, System.currentTimeMillis()));
     }
 
+    public void addAuthentication(HttpServletRequest request, Authentication authentication) {
+        final User user = (User) authentication.getDetails();
+        HttpSession session = request.getSession();
+        session.setAttribute(AUTH_HEADER_NAME, tokenHandler.createTokenForUser(user, System.currentTimeMillis()));
+    }
 
     public Authentication getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(AUTH_HEADER_NAME);
-        if (token != null) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute(AUTH_HEADER_NAME) != null) {
+//            String token = request.getHeader(AUTH_HEADER_NAME);
+            String token = (String) session.getAttribute(AUTH_HEADER_NAME);
+            if (token != null) {
 
-            try {
-                String user = tokenHandler.parseUserFromToken(token);
-                if (user != null) {
-                    Set<GrantedAuthority> set = getUserRoleFromClaims();
-                    User userNotification = new User(user, "", set);
-                    return new UserAuthentication(userNotification);
+                try {
+                    String user = tokenHandler.parseUserFromToken(token);
+                    if (user != null) {
+                        Set<GrantedAuthority> set = getUserRoleFromClaims();
+                        User userNotification = new User(user, "", set);
+                        return new UserAuthentication(userNotification);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getCause());
                 }
-            } catch (Exception e) {
-                throw new RuntimeException(e.getCause());
             }
         }
-
         return null;
     }
 
     /**
      * Получаем необходимые роли из токена
      *
-     * @return
+     * @return {@link GrantedAuthority}
      */
     public Set<GrantedAuthority> getUserRoleFromClaims() {
         Set<GrantedAuthority> authority = new HashSet<>();
