@@ -7,5 +7,5 @@ import java.util.List;
 public interface IUserRepository {
     List<User> getAllUsers();
 
-    void createUser(String userName, String password);
+    void createUser(String userName, String password, String roomNumber);
 }

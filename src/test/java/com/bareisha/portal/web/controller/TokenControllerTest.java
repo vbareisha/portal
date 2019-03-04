@@ -41,7 +41,7 @@ public class TokenControllerTest extends AbstractControllerTest {
     public void tryToLoginWithInvalidDataAndGetErrorBadRequest() throws Exception {
         setup();
 
-        ExternalUserDto user = getExternalUserDto("test", "test");
+        ExternalUserDto user = getExternalUserDto("test", "test", "1");
 
         String data = objectMapper.writeValueAsString(user);
         when(userService.checkUserByNameAndPassword(anyString(), anyString())).thenReturn(false);
@@ -50,10 +50,11 @@ public class TokenControllerTest extends AbstractControllerTest {
                 .andExpect(status().isBadRequest()).andReturn();
     }
 
-    private ExternalUserDto getExternalUserDto(String userName, String password) {
+    private ExternalUserDto getExternalUserDto(String userName, String password, String roomNumber) {
         ExternalUserDto user = new ExternalUserDto();
         user.setUserName(userName);
         user.setPassword(password);
+        user.setRoomNumber(roomNumber);
         return user;
     }
 
@@ -61,7 +62,7 @@ public class TokenControllerTest extends AbstractControllerTest {
     public void loginTest() throws Exception {
         setup();
 
-        ExternalUserDto user = getExternalUserDto("bareisha89@gmail.com", "1234");
+        ExternalUserDto user = getExternalUserDto("bareisha89@gmail.com", "1234", "1");
 
         String data = objectMapper.writeValueAsString(user);
         when(userService.checkUserByNameAndPassword(anyString(), anyString())).thenReturn(true);
@@ -75,10 +76,10 @@ public class TokenControllerTest extends AbstractControllerTest {
     public void createExistingUserAndGetErrorBadRequest() throws Exception {
         setup();
 
-        ExternalUserDto user = getExternalUserDto("bareisha89@gmail.com", "1234");
+        ExternalUserDto user = getExternalUserDto("bareisha89@gmail.com", "1234", "1");
         String data = objectMapper.writeValueAsString(user);
 
-        when(userService.createUser(anyString(), anyString())).thenReturn(false);
+        when(userService.createUser(anyString(), anyString(), anyString())).thenReturn(false);
 
         MvcResult mvcResult = this.mockMvc.perform(post(URL_CREATE_USER).contentType(contentType).content(data))
                 .andExpect(status().isBadRequest()).andReturn();
@@ -88,10 +89,10 @@ public class TokenControllerTest extends AbstractControllerTest {
     public void createUser() throws Exception {
         setup();
 
-        ExternalUserDto user = getExternalUserDto("bareisha89@gmail.com", "1234");
+        ExternalUserDto user = getExternalUserDto("bareisha89@gmail.com", "1234", "1");
         String data = objectMapper.writeValueAsString(user);
 
-        when(userService.createUser(user.getUserName(), user.getPassword())).thenReturn(true);
+        when(userService.createUser(user.getUserName(), user.getPassword(), user.getRoomNumber())).thenReturn(true);
 
         MvcResult mvcResult = this.mockMvc.perform(post(URL_CREATE_USER).contentType(contentType).content(data))
                 .andExpect(status().isOk()).andReturn();

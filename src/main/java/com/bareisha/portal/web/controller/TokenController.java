@@ -56,7 +56,7 @@ public class TokenController {
     @PostMapping("create")
     public ResponseEntity<?> createUser(@RequestBody ExternalUserDto newUser) {
         log.debug("Start to create user {}", newUser);
-        boolean result = userService.createUser(newUser.getUserName(), newUser.getPassword());
+        boolean result = userService.createUser(newUser.getUserName(), newUser.getPassword(), newUser.getRoomNumber());
 
         return result ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

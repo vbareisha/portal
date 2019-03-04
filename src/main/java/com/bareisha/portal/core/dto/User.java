@@ -12,11 +12,15 @@ public class User {
     @JsonProperty
     private String password;
 
+    @JsonProperty
+    private String roomNumber;
+
     public User() {
     }
 
-    public User(String name, String password) {
+    public User(String name, String password, String roomNumber) {
         this.name = name;
         this.password = password;
+        this.roomNumber = roomNumber;
     }
 }

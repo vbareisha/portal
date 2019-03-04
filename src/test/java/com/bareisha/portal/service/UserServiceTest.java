@@ -23,6 +23,7 @@ public class UserServiceTest {
 
     private static final String USER_NAME = "admin";
     private static final String PASSWORD = "123";
+    private static final String ROOM_NUMBER = "1";
 
     @Autowired
     private IUserService userService;
@@ -33,7 +34,7 @@ public class UserServiceTest {
     @Test
     public void checkUserByNameAndPassword() {
         when(userRepository.getAllUsers()).thenReturn(new ArrayList<User>() {{
-            add(new User(USER_NAME, PASSWORD));
+            add(new User(USER_NAME, PASSWORD, ROOM_NUMBER));
         }});
 
         Assert.assertTrue(userService.checkUserByNameAndPassword(USER_NAME, PASSWORD));
@@ -49,15 +50,15 @@ public class UserServiceTest {
     @Test
     public void createUser() {
         when(userRepository.getAllUsers()).thenReturn(new ArrayList<>());
-        Assert.assertTrue(userService.createUser(USER_NAME, PASSWORD));
+        Assert.assertTrue(userService.createUser(USER_NAME, PASSWORD, ROOM_NUMBER));
     }
 
     @Test
     public void createUsernadGetErrorExisting() {
         when(userRepository.getAllUsers()).thenReturn(new ArrayList<User>() {{
-            add(new User(USER_NAME, PASSWORD));
+            add(new User(USER_NAME, PASSWORD, ROOM_NUMBER));
         }});
 
-        Assert.assertFalse(userService.createUser(USER_NAME, PASSWORD));
+        Assert.assertFalse(userService.createUser(USER_NAME, PASSWORD, ROOM_NUMBER));
     }
 }

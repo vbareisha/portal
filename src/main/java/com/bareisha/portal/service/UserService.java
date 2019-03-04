@@ -32,16 +32,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean createUser(String userName, String password) {
+    public boolean createUser(String userName, String password, String roomNumber) {
         // check on existing user
         List<User> users = userRepository.getAllUsers();
         for (User user : users) {
-            if (user.getName().equals(userName) && user.getPassword().equals(password)) {
+            if (user.getName().equals(userName) && user.getPassword().equals(password) && user.getRoomNumber().equals(roomNumber)) {
                 return false;
             }
         }
         // not found any match - create user
-        userRepository.createUser(userName, password);
+        userRepository.createUser(userName, password, roomNumber);
         return true;
     }
 }

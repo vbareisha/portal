@@ -6,4 +6,5 @@ import lombok.Data;
 public class ExternalUserDto {
     private String userName;
     private String password;
+    private String roomNumber;
 }

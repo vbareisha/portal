@@ -55,9 +55,9 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public synchronized void createUser(String userName, String password) {
+    public synchronized void createUser(String userName, String password, String roomNumber) {
         List<User> users = getAllUsers();
-        users.add(new User(userName, password));
+        users.add(new User(userName, password, roomNumber));
         Map<String, Object> data = new HashMap<>();
 
         data.put("users", users);
