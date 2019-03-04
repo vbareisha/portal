@@ -30,11 +30,13 @@
 <script src="./js/jquery-3.3.1.min.js"></script>
 
 <script>
-    var SERVER_URL = 'http://localhost:8080';
+    var SERVER_URL = 'http://' + window.location.hostname;
+    if (window.location.port.length > 0) {
+        SERVER_URL = SERVER_URL + ':' + window.location.port;
+    }
 
     $('#login').click(function () {
         var url = SERVER_URL + '/token/login';
-
         $.ajax({
             url: url,
             method: "POST",
@@ -49,6 +51,7 @@
             }
         }).done(function (data) {
             console.log('Done' + data);
+            window.location = SERVER_URL + "/news";
         }).fail(function (jqXHR, textStatus) {
             console.log('fail - ' + textStatus);
         });
