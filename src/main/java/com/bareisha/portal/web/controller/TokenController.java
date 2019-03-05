@@ -57,11 +57,17 @@ public class TokenController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody ExternalUserDto newUser) {
         log.debug("Start to create user {}", newUser);
         boolean result = userService.createUser(newUser.getUserName(), newUser.getPassword(), newUser.getRoomNumber());
 
-        return result ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Map<String, String> responseJson = new HashMap<>();
+        if (result) {
+            responseJson.put("status", "ok");
+        } else {
+            responseJson.put("status", "error");
+        }
+        return result ? new ResponseEntity<>(responseJson, HttpStatus.OK) : new ResponseEntity<>(responseJson, HttpStatus.BAD_REQUEST);
     }
 }

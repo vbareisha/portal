@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .servletApi().and()
                 .authorizeRequests()
                 // Allow anonymous logins
-                .antMatchers(TOKEN_URL, CREATE_USER_URL, "/", "/css/**", "/js/**").permitAll()
+                .antMatchers(TOKEN_URL, CREATE_USER_URL, "/", "/register.html", "/css/**", "/js/**").permitAll()
                 .antMatchers(MAIN_URL, NEWS_URL).hasAnyRole(USER_ROLE)
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService),

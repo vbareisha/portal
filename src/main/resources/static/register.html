@@ -19,31 +19,38 @@
 <body class="text-center">
 <form class="form-signin">
     <h1 class="h3 mb-3 font-weight-normal">Добро пожаловать</h1>
-    <label for="username" class="sr-only">Логин</label>
+    <label for="username" class="sr-only">Email address</label>
     <input type="text" id="username" class="form-control" placeholder="Логин" required="" autofocus="">
+
+    <label for="roomNumber" class="sr-only">Room number</label>
+    <input type="number" id="roomNumber" class="form-control" placeholder="Номер квартиры" required="" autofocus="">
+
     <label for="password" class="sr-only">Password</label>
     <input type="password" id="password" class="form-control" placeholder="Password" required="">
-    <button class="btn btn-lg btn-primary btn-block" type="button" id="login">Вход</button>
-    <a href="/register.html">Регистрация</a>
+
+    <button class="btn btn-lg btn-primary btn-block" type="button" id="register">Регистрация</button>
     <p class="mt-5 mb-3 text-muted">© 2019</p>
 </form>
 
 <script src="./js/jquery-3.3.1.min.js"></script>
-
 <script>
     var SERVER_URL = 'http://' + window.location.hostname;
     if (window.location.port.length > 0) {
         SERVER_URL = SERVER_URL + ':' + window.location.port;
     }
-
-    $('#login').click(function () {
-        var url = SERVER_URL + '/token/login';
+    console.log(SERVER_URL);
+    $('#register').click(function () {
+        var url = SERVER_URL + '/token/create';
         $.ajax({
             url: url,
             method: "POST",
             dataType: 'json',
             contentType: 'application/json',
-            data: JSON.stringify({"userName": $('#username').val(), "password": $('#password').val()}),
+            data: JSON.stringify({
+                "userName": $('#username').val(),
+                "password": $('#password').val(),
+                "roomNumber": $('#roomNumber').val()
+            }),
             beforeSend: function (xhr) {
                 console.log('Send request ...' + url);
             },
@@ -52,13 +59,12 @@
             }
         }).done(function (data) {
             console.log('Done' + data);
-            window.location = SERVER_URL + "/news";
+            window.location = SERVER_URL;
         }).fail(function (jqXHR, textStatus) {
             console.log('fail - ' + textStatus);
         });
     });
 
 </script>
-
 </body>
 </html>
