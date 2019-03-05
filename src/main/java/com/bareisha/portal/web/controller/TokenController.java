@@ -10,16 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import static com.bareisha.portal.service.TokenAuthenticationService.AUTH_HEADER_NAME;
 
 @RestController
 @RequestMapping("/token")
@@ -69,5 +68,22 @@ public class TokenController {
             responseJson.put("status", "error");
         }
         return result ? new ResponseEntity<>(responseJson, HttpStatus.OK) : new ResponseEntity<>(responseJson, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logOut(HttpServletRequest request) {
+        String key = (String) request.getSession().getAttribute(AUTH_HEADER_NAME);
+        if (key != null) {
+            log.info("Logout user key: " + key);
+            request.getSession().removeAttribute(AUTH_HEADER_NAME);
+        } else {
+            log.error("User key not found in session!");
+        }
+
+        Map<String, String> responseJson = new HashMap<String, String>() {{
+            put("status", "ok");
+        }};
+
+        return new ResponseEntity<>(responseJson, HttpStatus.OK);
     }
 }

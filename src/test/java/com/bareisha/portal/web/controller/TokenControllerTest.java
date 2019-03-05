@@ -27,6 +27,8 @@ public class TokenControllerTest extends AbstractControllerTest {
 
     private static final String URL_CREATE_USER = "/token/create";
 
+    private static final String URL_LOG_OUT_USER = "/token/logout";
+
     @MockBean
     private IUserService userService;
 
@@ -59,7 +61,7 @@ public class TokenControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void loginTest() throws Exception {
+    public void getToken() throws Exception {
         setup();
 
         ExternalUserDto user = getExternalUserDto("bareisha89@gmail.com", "1234", "1");
@@ -104,5 +106,10 @@ public class TokenControllerTest extends AbstractControllerTest {
 
         MvcResult mvcResult = this.mockMvc.perform(post("/news"))
                 .andExpect(status().isForbidden()).andReturn();
+    }
+
+    @Test
+    public void logOut() throws Exception {
+        // todo tests for logout
     }
 }
