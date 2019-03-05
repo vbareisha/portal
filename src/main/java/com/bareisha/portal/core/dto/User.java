@@ -15,6 +15,9 @@ public class User {
     @JsonProperty
     private String roomNumber;
 
+    @JsonProperty
+    private Boolean active = false;
+
     public User() {
     }
 

@@ -1,3 +1,3 @@
 users:
-  - {name: bareisha89@gmail.com, password: 1234}
+  - {name: bareisha89@gmail.com, password: 1234, active: true}
   - {name: user2, password: 123}

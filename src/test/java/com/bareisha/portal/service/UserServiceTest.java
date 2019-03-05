@@ -34,7 +34,9 @@ public class UserServiceTest {
     @Test
     public void checkUserByNameAndPassword() {
         when(userRepository.getAllUsers()).thenReturn(new ArrayList<User>() {{
-            add(new User(USER_NAME, PASSWORD, ROOM_NUMBER));
+            User user = new User(USER_NAME, PASSWORD, ROOM_NUMBER);
+            user.setActive(true);
+            add(user);
         }});
 
         Assert.assertTrue(userService.checkUserByNameAndPassword(USER_NAME, PASSWORD));

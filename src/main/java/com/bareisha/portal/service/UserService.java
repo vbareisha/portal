@@ -23,7 +23,7 @@ public class UserService implements IUserService {
         List<User> users = userRepository.getAllUsers();
 
         for (User user : users) {
-            if (user.getName().equals(name) && user.getPassword().equals(password)) {
+            if (user.getName().equals(name) && user.getPassword().equals(password) && user.getActive()) {
                 return true;
             }
         }
